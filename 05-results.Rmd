@@ -227,7 +227,7 @@ ggplot(new_df, aes(fill=Categories, y = prop, x= reorder(Brands, -k))) +
     labs(x = "Brands", y = "Proportion of Each Category of Products") +
     coord_flip()
 ```
-<br>
+
 Out of the top 10 rated brands, four of them only sell "Fragrance", whereas one for "Skincare" and one for "Makeup". Composition of products might actually influence the ratings of brands: since "Fragrance" has a higher rating in general, it could be that brands which only sell perfumes, or mostly sell perfumes can end up with a higher ratings. 
 
 ```{r,echo=FALSE,warning=FALSE}

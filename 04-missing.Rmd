@@ -1,5 +1,7 @@
 # Missing values
-As mentioned in the previous sections, our data doesn't contain many missing values since we scraped data directly from our desired data source. Indicated by the graph, the only missing pattern in our data is rows missing Ratings variable because no customers have yet to review the products. Logically, these observations that lack Ratings variables will have extremly low numbers of total reviews and Loves as the products should have low "popularities", meaning very few customers have seen or know them. 
+As mentioned in the previous sections, our data doesn't contain many missing values since we scraped data directly from our desired data source. Indicated by the graph, the only missing pattern in our data is rows missing Ratings variable because no customers have yet to review the products.
+
+Logically, these observations that lack Ratings variables will have extremly low numbers of total reviews and Loves as the products should have low "popularities", meaning very few customers have seen or know them. 
 
 ```{r,echo=FALSE,warning=FALSE}
 visna(cosmetics, sort = "r")

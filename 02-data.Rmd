@@ -8,7 +8,7 @@ The resulting data frame consists of 3116 observations, 8 variables in total. Ev
 
 As mentioned before, we have met some major difficulties while acquiring our data, which also caused some issues within the data. Sephora uses lazy loading to optimize its online content, which means that we cannot scrape all the products off of its website. However, our key question somewhat relies on the popularity of the products, hence we just needed the top best-selling products from each brand, meaning we could just use the maximum number of products we could acquire from the website. It could be seen as a choice that we want to explore the top selling products, but if we want to, we could be investigating all the products available on Sephora.com. Another issue that went along with web-scraping is that the average ratings we could find for each product are rounds to the nearest 0.5. The reason being that the ratings is not in the form of characters or numbers in HTML tags, but as images of stars(ratings in form of stars). But we will use average ratings for each brand and for each category as a measure of performance, hence rounding of ratings will not have much impact on our analysis given the number of products are generous.
 
-If you wish to see our code to scrape the data, you can go to our Github repo:https://github.com/yujie980201/Sephora
+If you wish to see our code to scrape the data, you can go to our Github Repo:https://github.com/yujie980201/Sephora
 ```{r, eval = FALSE,echo=FALSE}
 #First check if Sephora allows us to scrape data
 paths_allowed(paths = "https://www.sephora.com")
