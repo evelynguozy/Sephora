@@ -24,7 +24,7 @@ ggplot(brand[1:30,], aes(x = avg_rating, y = fct_reorder(Brands, avg_rating))) +
 ```
 We will use these brands as examples to analyze the reasons behind high ratings.
 
-### Popularity
+## Popularity
 We believe popularity could be a factor of high ratings. The first thing we wanted to do is to eliminate brands with high ratings but very limited number of products. Brands with very few products could have biased ratings as it is easily influenced by extreme values.
 
 Below is brands with ratings above 4.5 but with less than 4 products.
