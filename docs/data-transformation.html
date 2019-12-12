@@ -145,9 +145,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
-<li class="chapter" data-level="5.0.1" data-path="results.html"><a href="results.html#popularity"><i class="fa fa-check"></i><b>5.0.1</b> Popularity</a></li>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#price"><i class="fa fa-check"></i><b>5.1</b> Price</a></li>
-<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#composition-of-products"><i class="fa fa-check"></i><b>5.2</b> Composition of Products</a></li>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#popularity"><i class="fa fa-check"></i><b>5.1</b> Popularity</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#price"><i class="fa fa-check"></i><b>5.2</b> Price</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#composition-of-products"><i class="fa fa-check"></i><b>5.3</b> Composition of Products</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -174,29 +174,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
 <p>Given the nature of this project and the direct data source from Sephora.com, our data needed very little manipulation. However, we do need to transform the data a little bit so that we could import it into R as a data frame. For each observation, the brand name, product name, URL, and category are naturally in forms of characters so we can leave as it to be. However, we have to transform the price, number of reviews, number of “Loves” and ratings columns in a way that we could later use them as numbers, which means we have strip unnecessary symbols or words in these columns. Fortunately, we could carry these steps all in R.</p>
 <p>Another issue to resolve in this data is to detect “NA”‘s, or missing values in the data. It is impossible for any observation to be missing product name, brand name, URL, or category given the structure of Sephora’ s website and the fact that we could not have scraped the product off the website if any of these information is missing, so we turned our focus to numeric values of the data set. It is possible for a product have 0 reviews or 0 Loves, but it doesn’t make sense for a product to have a rating of 0. In this case, any product with rating of 0 indicates that no customer has yet to rate the product. Therefore, 0 rating would be a missing value in our data.</p>
-<p>Below is our code to transform the data if you wish to see:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#Remove dollar sign from price column</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">cosmetics<span class="op">$</span>Prices &lt;-<span class="st"> </span><span class="kw">str_remove</span>(cos1<span class="op">$</span>Prices, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">$&quot;</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#Capture the current price</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(cosmetics<span class="op">$</span>Prices)) {</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  change =<span class="st"> </span><span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  j =<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="cf">while</span>(change <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">    j =<span class="st"> </span>j<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">    <span class="cf">if</span> (j <span class="op">&gt;=</span><span class="st"> </span><span class="kw">nchar</span>(cosmetics<span class="op">$</span>Prices[i])) {</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">      change =<span class="st"> </span><span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">    }</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">    <span class="cf">if</span> (<span class="kw">substr</span>(cosmetics<span class="op">$</span>Prices[i], j, j) <span class="op">==</span><span class="st"> &quot;(&quot;</span>) {</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">      change =<span class="st"> </span><span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">      cosmetics<span class="op">$</span>Prices[i] =<span class="st"> </span><span class="kw">substr</span>(cosmetics<span class="op">$</span>Prices[i], <span class="dv">1</span>, j<span class="dv">-1</span>)</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">    }</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">  }</a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">}</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#Transform Prices, Ratings, Reviews, and Loves columns to numeric values</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">cosmetics<span class="op">$</span>Prices =<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(cosmetics<span class="op">$</span>Prices), <span class="dv">0</span>, <span class="kw">as.numeric</span>(cosmetics<span class="op">$</span>Prices))</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">cosmetics<span class="op">$</span>Ratings =<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(cosmetics<span class="op">$</span>Ratings), <span class="dv">0</span>, <span class="kw">as.numeric</span>(cosmetics<span class="op">$</span>Ratings))</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">cosmetics<span class="op">$</span>Reviews =<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(cosmetics<span class="op">$</span>Reviews), <span class="dv">0</span>, <span class="kw">as.numeric</span>(cosmetics<span class="op">$</span>Reviews))</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22">cosmetics<span class="op">$</span>Loves =<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(cosmetics<span class="op">$</span>Loves), <span class="dv">0</span>, <span class="kw">as.numeric</span>(cosmetics<span class="op">$</span>Loves))</a></code></pre></div>
+<p>If you wish to see our code to scrape the data, you can go to our Github repo:<a href="https://github.com/yujie980201/Sephora" class="uri">https://github.com/yujie980201/Sephora</a></p>
 
 </div>
             </section>

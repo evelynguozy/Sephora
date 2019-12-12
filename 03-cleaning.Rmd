@@ -3,7 +3,7 @@ Given the nature of this project and the direct data source from Sephora.com, ou
 
 Another issue to resolve in this data is to detect "NA"'s, or missing values in the data. It is impossible for any observation to be missing product name, brand name, URL, or category given the structure of Sephora' s website and the fact that we could not have scraped the product off the website if any of these information is missing, so we turned our focus to numeric values of the data set. It is possible for a product have 0 reviews or 0 Loves, but it doesn't make sense for a product to have a rating of 0. In this case, any product with rating of 0 indicates that no customer has yet to rate the product. Therefore, 0 rating would be a missing value in our data. 
 
-Below is our code to transform the data if you wish to see:
+If you wish to see our code to scrape the data, you can go to our Github repo:https://github.com/yujie980201/Sephora
 ```{r, include = FALSE,echo=FALSE}
 library(dplyr)
 library(tidyverse)
