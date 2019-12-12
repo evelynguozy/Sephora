@@ -22,6 +22,7 @@ ggplot(brand[1:30,], aes(x = avg_rating, y = fct_reorder(Brands, avg_rating))) +
         panel.background = element_rect(fill = "transparent", color = "black", size = 0.2), 
         axis.ticks.x = element_line(size = 0.2))
 ```
+<br>
 We will use these brands as examples to analyze the reasons behind high ratings.
 
 ## Popularity
@@ -43,6 +44,7 @@ ggplot(brand_num, aes(x = reorder(Brands, freq), y = freq)) +
   ggtitle("Brands with Average Ratings above 4.5 and \nwith Less than 4 Products") +
   coord_flip()
 ```
+<br>
 Refer back to the list of top 30 rated brands, "Issey Miyake" only has one product listed on Sephora, meaning the ratings of this product will be the ratings for the brand. We could rule the reason of top ratings for "Issey Miyake" is that it has too few samples of products for us to evaluate the performance of the brand as a whole. The same argument could go for brand "Sand and Sky", too. 
 
 Now, could we get the same results with brands with more products? Since the maximum number of products a brand could have 12, it doesn't make sense to simly use number of products to judge if a brand has enough information(but we could use number of products to see if a brand doesn't have enough information).
@@ -55,6 +57,7 @@ plot_ly(brand[1:30,], x = ~sum_review, y = ~avg_rating, color = I("#0072B2"), te
   add_markers() %>% 
   layout(title="Top 30 Average Rated Brands in Sephora v.s. Total Number of Product Reviews", font = t, margin = m, xaxis = list(title = 'Total Number of Product Reviews'), yaxis = list(title = 'Average Ratings'))
 ```
+<br>
 As illustrated by the graph, brands with small number of reviews(< 2,000) have a wide range of ratings; however, brands with most number of reviews all have ratings below 4.7, e.g., Shiseido with around 6,500 total reviews but a rating of around 4.65, and belif with over 8,000 total reviews but a rating slightly over 4.5. It is safe to say most popular brands don't seem to be the best in ratings.
 
 It is also obvious that there is no brand that has high ratings and high number of reviews. All best rated brands, say ratings above 4.8, have very few reviews around or below 500. We could say with some confidence that popularity, or in this case, non-popularity could be a reason for high ratings. 
@@ -67,6 +70,7 @@ plot_ly(brand[1:30,], x = ~sum_love/1000, y = ~avg_rating, color = I("#009E73"),
   add_markers() %>% 
   layout(title = "Top 30 Average Rated Brands in Sephora v.s. Total Number of Product Loves", font = t, margin = m, xaxis = list(title = 'Total Number of Product Loves in Thousands'), yaxis = list(title = 'Average Ratings'))
 ```
+<br>
 The same conclusion could be drawn using total of Loves as measure of popularity too: brands with most number of Loves have no ratings above 4.7, and best rated brands all have toal number of Loves well below 50,000. 
 
 We could use brands with highest popularies, or with highest number of reviews and Loves, as a ceiling to other brands: if a brand could have a good amount of reviews and loves, but could also have a rating close to 5, breaking the ceiling, then the brand must be truly amazing. 
@@ -79,6 +83,7 @@ colnames(brand1) <- coln
 brand1 %>% filter(Ratings!=0) %>% dplyr::select("Ratings", "Total Number of Reviews", "Total Number of Loves") %>% 
   parcoords::parcoords(rownames = F, brushMode = "1D-axes", reorderable = T, queue = T, alpha = 0.2, width = 800)
 ```
+<br>
 Most of the brands have ratings in between 4.0 and 4.5, with total number of reivews below 10,000 and total number of Loves below 250,000. Brands with ratings above 4.5 rarely have large number of reviews and Loves as discussed before, but any outlier would be a brand that deserves all the attention. 
 
 The biggest take away here: most popular brands are never the best rated ones:)
@@ -114,6 +119,7 @@ plot_ly(brand[1:30, ], x = ~avg_price, y = ~sum_review, color = '#ff000050', tex
          xaxis = list(title = 'Brand Average Price'),
          yaxis = list(title = 'Total Number of Reviews'))
 ```
+<br>
 The result seems to be quite diverging; no obvious patterns emerged from the graph. At any price level, the total number of review ranges from 0 to 2500, with the exception of "belif" and "Shiseido". Also, given any number of reviews, the price range is quite large, too. It is reasonable to assume that price might not be a factor of popularity. 
 
 We choose not to use number of Love as an indicator of popularity in this part of analysis because it is more convincing if the customer have accepted the price and bought the product whereas writing a review confirms the action of purchasing the item. Putting the product in Love list might not be as persuasive as buying the product since it is just one click to "Love" the product.
@@ -127,6 +133,7 @@ plot_ly(brand[1:30, ], x = ~avg_price, y = ~avg_rating, color = I('#D55E00'), te
          xaxis = list(title = 'Brand Average Price'),
          yaxis = list(title = 'Ratings'))
 ```
+<br>
 The plot appears to be more sparce than the last one, and no pattern could be easily detected. It seems that price is not a direct factor on ratings of brands.
 
 We want to look more closely at the price distribution of top-rated brands: it might happen that top-rated brands share a similar pattern regarding price distribution. So we draw the price distribution of products from top 10 rated brands.
@@ -192,8 +199,7 @@ Since we are calculating average ratings, we need to know how many reviews there
 It might be wise to consider the three most reviewed categories for our analysis, which are "Makeup", "Skincare", and "Fragrance". However, they have quite different ratings: "Fragrance" has the highest among the three, and "Makeup" the lowest. 
 
 Now let's compare the compostion of productions for top 10 rated brands and bottom 10 rated brands.
-```{r,echo=FALSE}
-library(RColorBrewer)
+```{r,echo=FALSE,warning=FALSE}
 highest_10 = cosmetics[cosmetics$Brands %in% high_brands[0:10],]
 highest_10_df=highest_10 %>% 
   group_by(Brands, Categories) %>%
@@ -224,13 +230,13 @@ ggplot(new_df, aes(fill=Categories, y = prop, x= reorder(Brands, -k))) +
 <br>
 Out of the top 10 rated brands, four of them only sell "Fragrance", whereas one for "Skincare" and one for "Makeup". Composition of products might actually influence the ratings of brands: since "Fragrance" has a higher rating in general, it could be that brands which only sell perfumes, or mostly sell perfumes can end up with a higher ratings. 
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE}
 lowest_10 = cosmetics[cosmetics$Brands %in% high_brands[46:55],]
 lowest_10_df = lowest_10 %>% group_by(Brands, Categories) %>%
   summarize(freq=n()) %>% 
   filter() %>%
   mutate(prop=freq/sum(freq))
-lowest_10_df <lowest_10_df[order(-lowest_10_df$prop),]
+lowest_10_df =lowest_10_df[order(-lowest_10_df$prop),]
 cat_input="Skincare"
 new_df=lowest_10_df %>%
   group_by(Categories) %>%
