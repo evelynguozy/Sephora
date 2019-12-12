@@ -1,9 +1,9 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "Sephora"
+author: "Zhiyi Guo, Fan Wu, Yujie Wang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
 # Introduction
-
+The world of beauty is growing rapidly over the last decade. It has now become a huge part of our daily lives, no matter your skin color, your background, or your age. However, with the development of internet, distinguishing a truly amazing product has become more and more difficult with omnipresent marketing from beauty brands that have flooded all social media platforms. But going "online" could also lend a hand in analyzing the performance of advertised products: are they as good as their manufacturers claim to be? As data science students, we want to find the "truth" using the power of data: how to find a product, or a brand, that could indeed stand out on its own? We believe with the techniques we have learned so far, we could find an answer to this question. To gather information on different brands and products, we chose Sephora.com as our source of information as it is one of the leading retailers in the beauty community. It features over 300 brands globally, and has been tremendously successful at online sales. We want to use information available on Sephora.com to draw some conclusion regarding performance of top rating brands in Sephora.  

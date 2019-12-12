@@ -1,1 +1,79 @@
 # Data transformation
+Given the nature of this project and the direct data source from Sephora.com, our data needed very little manipulation. However, we do need to transform the data a little bit so that we could import it into R as a data frame. For each observation, the brand name, product name, URL, and category are naturally in forms of characters so we can leave as it to be. However, we have to transform the price, number of reviews, number of "Loves" and ratings columns in a way that we could later use them as numbers, which means we have strip unnecessary symbols or words in these columns. Fortunately, we could carry these steps all in R. 
+
+Another issue to resolve in this data is to detect "NA"'s, or missing values in the data. It is impossible for any observation to be missing product name, brand name, URL, or category given the structure of Sephora' s website and the fact that we could not have scraped the product off the website if any of these information is missing, so we turned our focus to numeric values of the data set. It is possible for a product have 0 reviews or 0 Loves, but it doesn't make sense for a product to have a rating of 0. In this case, any product with rating of 0 indicates that no customer has yet to rate the product. Therefore, 0 rating would be a missing value in our data. 
+
+Below is our code to transform the data if you wish to see:
+```{r, include = FALSE}
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(viridis)
+library(GGally)
+library(rvest)
+library(extracat)
+library(bookdown)
+library(shiny)
+library(robotstxt)
+library(ggthemes)
+cosmetics <- read.csv(file="~/Desktop/data.csv", header=TRUE)
+```
+```{r, eval = FALSE}
+#Remove dollar sign from price column
+cosmetics$Prices <- str_remove(cos1$Prices, "\\$")
+#Capture the current price
+for (i in 1:length(cosmetics$Prices)) {
+  change = FALSE
+  j = 0
+  while(change == FALSE) {
+    j = j+1
+    if (j >= nchar(cosmetics$Prices[i])) {
+      change = TRUE
+    }
+    if (substr(cosmetics$Prices[i], j, j) == "(") {
+      change = TRUE
+      cosmetics$Prices[i] = substr(cosmetics$Prices[i], 1, j-1)
+    }
+  }
+}
+#Transform Prices, Ratings, Reviews, and Loves columns to numeric values
+cosmetics$Prices = ifelse(is.na(cosmetics$Prices), 0, as.numeric(cosmetics$Prices))
+cosmetics$Ratings = ifelse(is.na(cosmetics$Ratings), 0, as.numeric(cosmetics$Ratings))
+cosmetics$Reviews = ifelse(is.na(cosmetics$Reviews), 0, as.numeric(cosmetics$Reviews))
+cosmetics$Loves = ifelse(is.na(cosmetics$Loves), 0, as.numeric(cosmetics$Loves))
+```
+
+```{r, include = FALSE}
+cosmetics <- read.csv(file="~/Desktop/data.csv", header=TRUE)
+cat_data <- cosmetics %>% group_by(Categories) %>%
+  summarize(avg_rating = mean(Ratings, na.rm = TRUE), avg_review = mean(Reviews, na.rm = TRUE), avg_loves = mean(Loves, na.rm = TRUE),sum_review = sum(Reviews, na.rm=TRUE)) %>% ungroup()
+cat_brand = cosmetics %>% group_by(Brands, Categories) %>%
+  summarize(freq=n())%>%filter() %>%
+  mutate(prop=freq/sum(freq))
+```
+
+```{r, include = FALSE}
+sephora <- cosmetics %>% group_by(Brands) %>%
+  mutate(sum_review = sum(Reviews)) %>%
+  mutate(sum_love = sum(Loves)) %>%
+  mutate(avg_rating = sum(Ratings*Reviews)/sum_review) %>% ungroup()
+sephora$Prices = ifelse(is.na(cosmetics$Prices), 0, as.numeric(cosmetics$Prices))
+sephora <- sephora %>% group_by(Brands) %>%
+  mutate(num = n()) %>%
+  mutate(avg_price = sum(Prices)/num) %>% ungroup()
+brand <- sephora[c("Brands", "avg_price", "num", "avg_rating", "sum_review", "sum_love")]
+brand <- brand %>% distinct()
+brand$avg_rating = ifelse(is.na(brand$avg_rating), 0, as.numeric(brand$avg_rating))
+brand <- brand[with(brand, order(-avg_rating)), ]
+brand$avg_price = ifelse(is.na(brand$avg_price), 0, as.numeric(brand$avg_price))
+high_rating_brands = brand["Brands"]
+high_brands = high_rating_brands$Brands
+new_data = cosmetics[cosmetics$Brands %in% high_brands[0:55],]
+brand_num = cosmetics[cosmetics$Brands %in% high_brands[0:55],] %>%
+  group_by(Brands) %>% 
+  summarize(freq = n()) %>% 
+  filter(freq <= 4)
+```
+
+

@@ -1,2 +1,50 @@
 # Data sources
 
+Choosing Sephora.com as our data source, we wanted to scrape data directly of off its website. We used rvest package in R as our tool to scrape the data. Sephora's website has a relatively easy layout for us to acquire the data: it has a section that contains the names of all the brands it carries and the link to each brand page. Within each brand page, all products belong to the brand will be displayed and customers could view the products by categories such as makeup, skincare, and etc. 
+
+It turned out to be a lengthy and quite difficult task to scrape data off the website, as we have encountered some obstacles during the process, the biggest one being figuring out what the corresponding CSS codes are for the particular elements we want on the website. After going through the source code thoroughly, we have successfully identified all the elements we want. First, we scraped off all the brand names and the links to the brand. Then we would go into each link to the brand to find the top 12 best-selling products of each brand. Finally, for each product, basic information is scraped off as well. 
+
+The resulting data frame consists of 3116 observations, 8 variables in total. Every observation is a product and every product contains information including brand name, product name, category of the product, price, ratings, number of reviews, number of "loves", and the URL to the product. There are 320 brands in total. All products fall into 10 categories, including Bath & Body, Fragrances, Gifts, Hair, Makeup, Men, Mini Size, Skincare, Tool & Brushes, and Treatments. The highest possible ratings is 5 (ratings are out of stars, and 5 stars are the maximum). "Loves" is a special feature on Sephora: it allows customers to save the product in their personal shopping list as it indicates interest in the product. It captures how many customers have saved this item in their shopping lists. We will use this feature as a measure of popularity in our analysis.
+
+As mentioned before, we have met some major difficulties while acquiring our data, which also caused some issues within the data. Sephora uses lazy loading to optimize its online content, which means that we cannot scrape all the products off of its website. However, our key question somewhat relies on the popularity of the products, hence we just needed the top best-selling products from each brand, meaning we could just use the maximum number of products we could acquire from the website. It could be seen as a choice that we want to explore the top selling products, but if we want to, we could be investigating all the products available on Sephora.com. Another issue that went along with web-scraping is that the average ratings we could find for each product are rounds to the nearest 0.5. The reason being that the ratings is not in the form of characters or numbers in HTML tags, but as images of stars(ratings in form of stars). But we will use average ratings for each brand and for each category as a measure of performance, hence rounding of ratings will not have much impact on our analysis given the number of products are generous.
+
+Below is our code to scrape the data if you wish to see:
+```{r, eval = FALSE}
+#First check if Sephora allows us to scrape data
+paths_allowed(paths = "https://www.sephora.com")
+brands = read_html("https://www.sephora.com/brands-list") %>%
+  html_nodes(".css-kxa5od") %>% html_attr("href") #Read all brands and their links first
+append = rep("https://www.sephora.com",times = length(brands))
+brandLink = paste0(append, brands) #Append prefix to each link 
+append = rep("/all", times = length(brands))
+brandLink = paste0(brandLink, append)
+
+cosmetics <- data.frame(matrix(ncol = 8)) #Create a data frame to capture all products
+x <- c("Brands", "Products", "Categories", "Prices", "Ratings", "Reviews", "Loves", "URL") #Create variables
+colnames(cosmetics) <- x
+
+#Go through all the brands first
+for (i in 1:length(brands)) {
+  productlist = read_html(brandLink[i]) %>% html_nodes(".css-ix8km1") %>% html_attr("href")
+  append = rep("https://www.sephora.com", times = length(productlist))
+  productlink = paste0(append, productlist)
+  #Go through every product under each brand
+  if(length(productlist)>0) {
+    for (j in 1:length(productlink)) {
+      productlink[j] = str_replace(productlink[j], " ", "%20")
+      brandname = read_html(productlink[j]) %>% html_nodes(".css-euydo4") %>% html_text()
+      productname = read_html(productlink[j]) %>% html_nodes(".css-a1jw00 .css-0") %>%html_text()
+      broadcategory = read_html(productlink[j]) %>% html_nodes(".css-1ylrown") %>% html_text()
+      categories = broadcategory[1]
+      price = read_html(productlink[j]) %>% html_nodes(".css-14hdny6") %>% html_text()
+      ratings = read_html(productlink[j]) %>% html_nodes(".css-r17a09")%>% html_attr('aria-label')
+      two = read_html(productlink[j]) %>% html_nodes(".css-2rg6q7") %>% html_text()
+      number = two[1]
+      loves = two[2]
+      #Append each product to the data frame
+      newRow <- c(Brands = brandname, Products = productname, Categories = categories, Prices = price, Ratings = ratings, Reviews = number, Loves = loves, URL = productlink[j]) 
+      cosmetics <- rbind(cosmetics, newRow)
+    }
+  }
+}
+```
