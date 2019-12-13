@@ -1,6 +1,6 @@
 # Interactive component
 
-```{r}
+```{r,echo=FALSE}
 ui <- fluidPage(
   titlePanel("Composition of Products of Sephora Beauty Brands"),
   sidebarLayout(
@@ -15,11 +15,13 @@ ui <- fluidPage(
                   min = 1,
                   max = 50),
       selectInput("categories", "Categories:", choices = c("Fragrance", "Skincare", "Makeup", "Bath & Body", "Mini size", "Tools & Brushes", "Hair", "Men", "Gifts")),
-      hr()),
+      hr()
+),
   
     mainPanel(
       tabsetPanel(type = "tabs", tabPanel("Plot", plotOutput("plot"))),
-      p("")
+      p("Here is the percentage bar graph with top/bottom rated brands and specific category that you want to know about. Each bar shows the proportions of each categories for the brand." ),
+      p("For the category you selected, you can see the specific category at the bottom of the bar chart with ascending proportion." )
     )
   )
 )
@@ -60,13 +62,12 @@ server <- function(input, output) {
 
   ggplot(new_df, aes(fill = Categories, y = prop, x = reorder(Brands, -k))) + 
         geom_bar(position = "fill", stat = "identity") +
+    scale_fill_brewer(palette="Set2")+
         xlab("Brands") +
         theme(axis.text.x = element_text(color = "#993333", size = 13)) +
-        ggtitle(paste0("Proportion of categories for top", num, "Brand Ratings")) +
+        ggtitle(paste0("Proportion of categories for "," ",input$selection," ", num, " Brand Ratings")) +
         coord_flip()
        })
   }
 shinyApp(ui, server, options = list(height = 550))
 ```
-
-

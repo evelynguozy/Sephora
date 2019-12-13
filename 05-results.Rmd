@@ -55,7 +55,7 @@ m <- list(l = 50, r = 50, b = 100, t = 100, pad = 4)
 t <- list(size = 13)
 plot_ly(brand[1:30,], x = ~sum_review, y = ~avg_rating, color = I("#0072B2"), text = ~Brands, hoverinfo = 'text') %>%
   add_markers() %>% 
-  layout(title="Top 30 Average Rated Brands in Sephora v.s. Total Number of Product Reviews", font = t, margin = m, xaxis = list(title = 'Total Number of Product Reviews'), yaxis = list(title = 'Average Ratings'))
+  layout(title="Top 30 Average Rated Brands in Sephora  v.s. \n Total Number of Product Reviews", font = t, margin = m, xaxis = list(title = 'Total Number of Product Reviews'), yaxis = list(title = 'Average Ratings'))
 ```
 <br>
 As illustrated by the graph, brands with small number of reviews(< 2,000) have a wide range of ratings; however, brands with most number of reviews all have ratings below 4.7, e.g., Shiseido with around 6,500 total reviews but a rating of around 4.65, and belif with over 8,000 total reviews but a rating slightly over 4.5. It is safe to say most popular brands don't seem to be the best in ratings.
@@ -68,7 +68,7 @@ m <- list(l = 50, r = 50, b = 100, t = 100, pad = 4)
 t <- list(size = 13)
 plot_ly(brand[1:30,], x = ~sum_love/1000, y = ~avg_rating, color = I("#009E73"), text = ~Brands, hoverinfo = 'text') %>% 
   add_markers() %>% 
-  layout(title = "Top 30 Average Rated Brands in Sephora v.s. Total Number of Product Loves", font = t, margin = m, xaxis = list(title = 'Total Number of Product Loves in Thousands'), yaxis = list(title = 'Average Ratings'))
+  layout(title = "Top 30 Average Rated Brands in Sephora v.s. \n Total Number of Product Loves", font = t, margin = m, xaxis = list(title = 'Total Number of Product Loves in Thousands'), yaxis = list(title = 'Average Ratings'))
 ```
 <br>
 The same conclusion could be drawn using total of Loves as measure of popularity too: brands with most number of Loves have no ratings above 4.7, and best rated brands all have toal number of Loves well below 50,000. 
