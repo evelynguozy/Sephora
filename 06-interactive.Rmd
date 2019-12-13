@@ -1,14 +1,11 @@
 # Interactive Components
 
 ## Price v.s. Other Variables
-To see more intuition behind our findings, we provide two interactive plots to show readers how these factors could inter-relate. 
-
-The first plot explores how pricing of products could influence other aspects of the brand. However, as discussed before, we didn't find too strong a correlation between average prices of products and the popularity of the brand or its ratings. The number of brands we focused on before is limited, hence we want to provide this opportunity for our readers to explore this relationship for all brands carried in Sephora. Readers will have the choice to choose between total number of reviews, total number of Loves, ratings and average pricing of a brand to create a scatterplot. 
-
-Link to interactive plot: https://yujie980201.shinyapps.io/price/
+```{r,echo=FALSE}
+knitr::include_app("https://yujie980201.shinyapps.io/price/", height = "1100px")
+```
 
 ## Composition of Products
-
-The second plot explores how composition of products of a brand could affect brand's ratings. We believe brands which carry higher-rating categories of products could potentially have a higher-than-average ratings. Readers could choose how many brands they want to explore, up to 50, from top or from the bottom of brand's composition of products in a bar chart fashion. 
-
-Link to interactive plot: https://yujie980201.shinyapps.io/category/
+```{r,echo=FALSE}
+knitr::include_app("https://yujie980201.shinyapps.io/category/", height = "1100px")
+```

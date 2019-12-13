@@ -17,7 +17,7 @@ library(bookdown)
 library(shiny)
 library(robotstxt)
 library(ggthemes)
-cosmetics <- read.csv(file="~/Desktop/data.csv", header=TRUE)
+cosmetics <- read.csv(file="~/Desktop/STAT5702/hw5/data.csv", header=TRUE)
 ```
 ```{r, eval = FALSE,echo=FALSE}
 #Remove dollar sign from price column
@@ -45,7 +45,7 @@ cosmetics$Loves = ifelse(is.na(cosmetics$Loves), 0, as.numeric(cosmetics$Loves))
 ```
 
 ```{r, include = FALSE,echo=FALSE}
-cosmetics <- read.csv(file="~/Desktop/data.csv", header=TRUE)
+cosmetics <- read.csv(file="~/Desktop/STAT5702/hw5/data.csv", header=TRUE)
 cat_data <- cosmetics %>% group_by(Categories) %>%
   summarize(avg_rating = mean(Ratings, na.rm = TRUE), avg_review = mean(Reviews, na.rm = TRUE), avg_loves = mean(Loves, na.rm = TRUE),sum_review = sum(Reviews, na.rm=TRUE)) %>% ungroup()
 cat_brand = cosmetics %>% group_by(Brands, Categories) %>%
