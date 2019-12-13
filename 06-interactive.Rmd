@@ -1,73 +1,11 @@
-# Interactive component
+# Interactive Components
 
+## Price v.s. Other Variables
 ```{r,echo=FALSE}
-ui <- fluidPage(
-  titlePanel("Composition of Products of Sephora Beauty Brands"),
-  sidebarLayout(
-    sidebarPanel( 
-      radioButtons("selection", "Choose top or bottom brands:",
-                   c("Top Rated" = "top" ,
-                     "Bottom Rated" = "bottom")),
-      br(),
-      sliderInput("n",
-                  "Number of Brands:",
-                  value = 10,
-                  min = 1,
-                  max = 50),
-      selectInput("categories", "Categories:", choices = c("Fragrance", "Skincare", "Makeup", "Bath & Body", "Mini size", "Tools & Brushes", "Hair", "Men", "Gifts")),
-      hr()
-),
-  
-    mainPanel(
-      tabsetPanel(type = "tabs", tabPanel("Plot", plotOutput("plot"))),
-      p("Here is the percentage bar graph with top/bottom rated brands and specific category that you want to know about. Each bar shows the proportions of each categories for the brand." ),
-      p("For the category you selected, you can see the specific category at the bottom of the bar chart with ascending proportion." )
-    )
-  )
-)
+knitr::include_app("https://yujie980201.shinyapps.io/price/", height = "1100px")
+```
 
-server <- function(input, output) {
-  d <- reactive({
-    dist <- switch(input$selection)
-    dist(input$n)
-  })
-  output$plot <- renderPlot({
-  MyData <- read.csv(file="~/Desktop/data_.csv", header=TRUE)
-  sephora = MyData
-  sephora$Ratings = ifelse(is.na(sephora$Ratings), 0, as.numeric(sephora$Ratings))
-  sephora$Reviews = ifelse(is.na(sephora$Reviews), 0, as.numeric(sephora$Reviews))
-  sephora <- sephora %>% group_by(Brands) %>%
-  mutate(sum_review = sum(Reviews)) %>%
-  mutate(sum_love = sum(Loves)) %>%
-  mutate(avg_rating = sum(Ratings*Reviews)/sum_review) %>% ungroup()
-  brand <- sephora[c(1,9,10,11)]
-  brand <- brand %>% distinct()
-  num = input$n
-  if (input$selection == "top") {
-    brand <- brand[with(brand, order(-avg_rating)),]
-  } else {
-    brand <- brand[with(brand, order(avg_rating)),]
-  }
-  high_brands = brand["Brands"]$Brands
-  top = MyData[MyData$Brands %in% high_brands[0:num],]
-  top_df = top %>% 
-    group_by(Brands,Categories) %>%
-    summarize(freq=n()) %>% 
-    filter() %>%
-    mutate(prop = freq/sum(freq))
-  top_df <-top_df[order(-top_df$prop),]
-  cat_input = input$categories
-  new_df = top_df %>% group_by(Categories)%>% 
-    mutate(k = ifelse(Categories == cat_input,1+prop,0))
-
-  ggplot(new_df, aes(fill = Categories, y = prop, x = reorder(Brands, -k))) + 
-        geom_bar(position = "fill", stat = "identity") +
-    scale_fill_brewer(palette="Set2")+
-        xlab("Brands") +
-        theme(axis.text.x = element_text(color = "#993333", size = 13)) +
-        ggtitle(paste0("Proportion of categories for "," ",input$selection," ", num, " Brand Ratings")) +
-        coord_flip()
-       })
-  }
-shinyApp(ui, server, options = list(height = 550))
+## Composition of Products
+```{r,echo=FALSE}
+knitr::include_app("https://yujie980201.shinyapps.io/category/", height = "1100px")
 ```
