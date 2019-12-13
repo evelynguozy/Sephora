@@ -263,5 +263,3 @@ Out of the bottom 10 rated brands, three of them only sell "Skincare", whereas t
 We could make some assumption between composition of products of a brand and its ratings: a brand that sell highest rating categories of products tend to be have higher ratings. 
 
 In conclusion, although not very strongly, popularities of a brand and composition of products could potentially influence the ratings of the brand on Sephora. Price might not be an as important as a factor we consider it to be when accessing the performance of a brand.
-
-See interactive
