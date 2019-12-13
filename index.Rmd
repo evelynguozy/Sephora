@@ -1,5 +1,5 @@
 --- 
-title: "Sephora"
+title: "Sephora Brand Ratings"
 author: "Zhiyi Guo, Fan Wu, Yujie Wang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
