@@ -257,7 +257,7 @@ ggplot(new_df, aes(fill = Categories, y = prop, x= reorder(Brands, -k))) +
     labs(x = "Brands", y = "Proportion of Each Category of Products") +
     coord_flip()
 ```
-<br>
+
 Out of the bottom 10 rated brands, three of them only sell "Skincare", whereas two for "Makeup" and one for "Fragrance". Although "Skincare" doesn't have the lowest rating among the three, 30% of lowest rating brands only sell "Skincare". Also, highest-rated category "Fragrance" among the three does have lowest number of brands only selling perfumes. 
 
 We could make some assumption between composition of products of a brand and its ratings: a brand that sell highest rating categories of products tend to be have higher ratings. 
