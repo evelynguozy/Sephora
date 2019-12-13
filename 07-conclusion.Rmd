@@ -5,5 +5,4 @@ Besides basic information of a product, Sephora also provides its ingredient lis
 
 If you wish to re-create our project, see the Github repo here for data and everything else: https://github.com/yujie980201/Sephora
 <br> 
-
 *All colors used in this project are colorblind friendly.
