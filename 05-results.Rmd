@@ -22,7 +22,7 @@ ggplot(brand[1:30,], aes(x = avg_rating, y = fct_reorder(Brands, avg_rating))) +
         panel.background = element_rect(fill = "transparent", color = "black", size = 0.2), 
         axis.ticks.x = element_line(size = 0.2))
 ```
-<br>
+
 We will use these brands as examples to analyze the reasons behind high ratings.
 
 ## Popularity
